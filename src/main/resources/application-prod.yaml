@@ -1,0 +1,16 @@
+# 生产环境
+text: 这是生产环境
+
+# 数据库驱动
+# 数据库连接地址
+# 数据库用户名&密码
+# 应用服务 WEB 访问端口
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://47.120.7.229:3306/water_monitor?serverTimezone=UTC
+    username: water_monitor
+    password: 6ChtSe2Rrt
+
+server:
+  port: 9999

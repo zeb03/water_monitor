@@ -1,0 +1,17 @@
+# 数据库驱动
+# 数据库连接地址
+# 数据库用户名&密码
+# 应用服务 WEB 访问端口
+spring:
+  profiles:
+    active: prod
+  swagger2:
+    enabled: true
+
+#指定Mybatis的Mapper文件
+mybatis-plus:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.zeb.water_monitor.entity
+  configuration:
+    map-underscore-to-camel-case: true
+  type-enums-package: com.zeb.water_monitor.enums
