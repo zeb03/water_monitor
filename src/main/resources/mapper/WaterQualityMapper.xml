@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zeb.water_monitor.mapper.WaterQualityMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.zeb.water_monitor.entity.WaterQuality">
+        <id column="id" property="id" />
+        <result column="PH" property="ph" />
+        <result column="temperature" property="temperature" />
+        <result column="conductivity" property="conductivity" />
+        <result column="date" property="date" />
+        <result column="station" property="station" />
+        <result column="turbidity" property="turbidity" />
+    </resultMap>
+
+</mapper>
