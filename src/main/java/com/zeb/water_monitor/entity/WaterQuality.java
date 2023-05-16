@@ -32,7 +32,7 @@ public class WaterQuality implements Serializable {
     private Integer id;
 
     @TableField("ph")
-    @ApiModelProperty("PH值")
+    @ApiModelProperty("ph值")
     private Float ph;
 
     @TableField("temperature")

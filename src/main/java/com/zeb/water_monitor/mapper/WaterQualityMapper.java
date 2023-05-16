@@ -1,7 +1,7 @@
 package com.zeb.water_monitor.mapper;
 
-import com.zeb.water_monitor.entity.WaterQuality;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.zeb.water_monitor.entity.WaterQuality;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -15,4 +15,5 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface WaterQualityMapper extends BaseMapper<WaterQuality> {
 
+//    List<WaterQuality> substandard();
 }

@@ -12,5 +12,10 @@
         <result column="station" property="station" />
         <result column="turbidity" property="turbidity" />
     </resultMap>
+<!--    <select id="substandard" resultType="com.zeb.water_monitor.entity.WaterQuality">-->
+<!--        select *-->
+<!--        from water_quality-->
+<!--        where ph &lt; 6 or ph &gt; 9 or-->
+<!--    </select>-->
 
 </mapper>

@@ -23,10 +23,7 @@ public interface WaterQualityService extends IService<WaterQuality> {
      */
     PlotVO getDataForPlot(String area,Integer period,String indicator);
 
-    /**
-     *
-     * @param indicator
-     * @return
-     */
+
     Prediction getDateForPrediction(String indicator);
+
 }

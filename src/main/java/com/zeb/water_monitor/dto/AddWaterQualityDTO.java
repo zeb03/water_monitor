@@ -32,9 +32,17 @@ public class AddWaterQualityDTO implements Serializable {
     @ApiModelProperty("浊度")
     private Float turbidity;
 
+    @TableField("tds")
+    @ApiModelProperty("溶氧")
+    private Float tds;
+
     @TableField("station")
     @ApiModelProperty("监测船")
-    private Integer station;
+    private String station;
+
+    @TableField("area")
+    @ApiModelProperty("监测区域")
+    private String area;
 
 
 }

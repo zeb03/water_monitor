@@ -41,7 +41,7 @@ public class SwaggerConfig extends MyWebConfig {
         return new ApiInfoBuilder()
                 .title("水质质量监测系统")
                 .version("1.0")
-                .description("新增了本月不达标区域、获取所有监测区域接口；修改了分页查询水质数据接口（可以根据区域查询）、获取水质示意图接口（根据区域、时间、水质参数获取）；增加了area字段，station（string）字段为监测船，经纬度字段还未添加")
+                .description("新增了本月不达标区域、获取所有监测区域接口；修改了分页查询水质数据接口（可以根据区域查询）、获取水质示意图接口（根据区域、时间、水质参数获取）、获取当日水质数据接口（可以选择区域）；新增area字段，注意：station（string）字段为监测船，经纬度字段还未添加")
                 .build();
     }
 
