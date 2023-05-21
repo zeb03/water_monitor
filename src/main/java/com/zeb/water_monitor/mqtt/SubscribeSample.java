@@ -1,8 +1,14 @@
 package com.zeb.water_monitor.mqtt;
 
+import com.alibaba.fastjson.JSON;
+import com.zeb.water_monitor.dto.MqttDataDTO;
+import com.zeb.water_monitor.entity.WaterQuality;
+import com.zeb.water_monitor.service.WaterQualityService;
 import com.zeb.water_monitor.utils.RandomNum;
 import org.eclipse.paho.client.mqttv3.*;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
+
+import java.time.LocalDateTime;
 
 /**
  * @author zeb
@@ -10,7 +16,9 @@ import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
  */
 public class SubscribeSample {
 
-    public static void main(String[] args) {
+    private static int num = 0;
+
+    public static void insertData(WaterQualityService waterQualityService){
         String broker = "tcp://39.106.34.203:1883";
         String topic = "LeCar214923124s";
         String username = "admin";
@@ -38,7 +46,20 @@ public class SubscribeSample {
                 public void messageArrived(String topic, MqttMessage message) {
                     System.out.println("topic: " + topic);
                     System.out.println("Qos: " + message.getQos());
-                    System.out.println("message content: " + new String(message.getPayload()));
+                    String content = new String(message.getPayload());
+                    MqttDataDTO mqttDataDTO = JSON.parseObject(content.substring(content.indexOf("{")).replaceAll("TEMP:", ""), MqttDataDTO.class);
+
+                    WaterQuality waterQuality = new WaterQuality();
+                    waterQuality.setPh(mqttDataDTO.getPH());
+                    waterQuality.setConductivity(mqttDataDTO.getEC());
+                    waterQuality.setTemperature(mqttDataDTO.getTemper());
+                    waterQuality.setTurbidity(mqttDataDTO.getTU());
+                    waterQuality.setDate(LocalDateTime.now());
+
+                    waterQualityService.save(waterQuality);
+
+                    System.out.println("已经添加" + num++ + "条数据");
+
                 }
 
                 @Override

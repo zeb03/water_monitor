@@ -17,13 +17,13 @@ import java.util.List;
  */
 public class AutoGenerator {
 
-    private static final String URL = "jdbc:mysql://localhost:3306/water?useSSL=false&useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT%2B8";
-    private static final String USERNAME = "root";
-    private static final String PASSWORD = "abc123";
+    private static final String URL = "jdbc:mysql://47.120.7.229:3306/water_monitor?serverTimezone=UTC";
+    private static final String USERNAME = "water_monitor";
+    private static final String PASSWORD = "6ChtSe2Rrt";
 
     public static void main(String[] args) {
         List<String> tables = new ArrayList<>();
-        tables.add("model");
+        tables.add("station");
 
 
         FastAutoGenerator.create(URL, USERNAME, PASSWORD)
