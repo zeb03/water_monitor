@@ -1,6 +1,6 @@
 package com.zeb.water_monitor;
 
-import com.zeb.water_monitor.mqtt.SubscribeSample;
+import com.zeb.water_monitor.mqtt.SubScribeSample;
 import com.zeb.water_monitor.service.WaterQualityService;
 import com.zeb.water_monitor.utils.SpringUtil;
 import org.springframework.boot.SpringApplication;
@@ -22,7 +22,7 @@ public class WaterMonitorApplication {
         //实时获取水质数据
         ApplicationContext context = SpringUtil.getApplicationContext();
         WaterQualityService waterQualityService = context.getBean(WaterQualityService.class);
-        SubscribeSample.insertData(waterQualityService);
+        SubScribeSample.insertData(waterQualityService);
     }
 
 
