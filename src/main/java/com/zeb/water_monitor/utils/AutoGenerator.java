@@ -41,7 +41,7 @@ public class AutoGenerator {
                             .moduleName("")
                             .entity("entity")
                             .service("service")
-                            .serviceImpl("serviceImpl")
+                            .serviceImpl("service.Impl")
                             .controller("controller")
                             .mapper("mapper")
                             .xml("mapper")

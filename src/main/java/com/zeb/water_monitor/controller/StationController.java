@@ -5,15 +5,14 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.zeb.water_monitor.common.BaseContext;
 import com.zeb.water_monitor.common.CustomException;
 import com.zeb.water_monitor.common.Result;
-import com.zeb.water_monitor.entity.Area;
+import com.zeb.water_monitor.entity.Station;
 import com.zeb.water_monitor.entity.User;
 import com.zeb.water_monitor.entity.WaterQuality;
 import com.zeb.water_monitor.enums.RoleEnum;
-import com.zeb.water_monitor.service.AreaService;
+import com.zeb.water_monitor.service.StationService;
 import com.zeb.water_monitor.service.UserService;
 import com.zeb.water_monitor.service.WaterQualityService;
 import io.swagger.annotations.ApiOperation;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -22,67 +21,67 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * <p>
- * 前端控制器
- * </p>
  *
  * @author zeb
  * @since 2023-05-21
  */
-@Slf4j
 @RestController
-@RequestMapping("/area")
-public class AreaController {
+@RequestMapping("/station")
+public class StationController {
 
     @Autowired
-    private AreaService areaService;
-
-    @Autowired
-    private UserService userService;
+    private StationService stationService;
 
     @Autowired
     private WaterQualityService waterQualityService;
 
-    @ApiOperation(value = "查询所有区域")
+    @Autowired
+    private UserService userService;
+
+    @ApiOperation(value = "查询指定区域监测船", notes = "注意：获取监测船的接口之前写过，但此接口可以返回监测船的id，用于修改和删除操作；根据监测区域获取区域下所有监测船；area为监测区域，不传值代表查询所有区域")
     @GetMapping("/list")
-    public Result<List> getAllAreas() {
-        List<Area> list = areaService.list();
+    public Result<List> getAllStations(String area) {
+
+        LambdaQueryWrapper<Station> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(area != null && !"".equals(area), Station::getArea, area);
+        List<Station> list = stationService.list(wrapper);
+
         return Result.success(list);
+
     }
 
-    @ApiOperation(value = "添加区域", notes = "只需传输区域名称参数name即可")
+    @ApiOperation(value = "添加监测船", notes = "无需传输id")
     @PostMapping("/add")
-    public Result<String> addArea(@RequestBody Area area) {
-        areaService.save(area);
+    public Result<String> addStation(@RequestBody Station station) {
+        stationService.save(station);
         return Result.success("添加成功");
     }
 
-    @ApiOperation(value = "删除区域", notes = "根据id进行删除")
+    @ApiOperation(value = "删除监测船", notes = "根据监测船id进行删除")
     @DeleteMapping("/delete/{id}")
     public Result<String> deleteArea(@PathVariable("id") Integer id) {
-        //通过id获取区域
-        Area area = areaService.getById(id);
-        if (area == null) {
+        Station station = stationService.getById(id);
+
+        if (station == null) {
             throw new CustomException("无此id数据");
         }
 
-        //查看水质数据表中是否有改区域
+        //查看水质数据表中是否有该监测船
         LambdaQueryWrapper<WaterQuality> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(area.getName() != null, WaterQuality::getArea, area.getName());
+        wrapper.eq(station.getName() != null, WaterQuality::getStation, station.getName());
         List<WaterQuality> list = waterQualityService.list(wrapper);
 
-        log.info("list:" + list);
         if (list != null && !list.isEmpty()) {
-            throw new CustomException("删除失败，请先删除或修改水质数据表中区域名为" + area.getName() + "的字段");
+            throw new CustomException("删除失败，请先删除或修改水质数据表中监测船为" + station.getName() + "的字段");
         }
-        areaService.removeById(id);
+        stationService.removeById(id);
         return Result.success("删除成功");
     }
 
-    @ApiOperation(value = "修改区域", notes = "")
+    @ApiOperation(value = "修改监测船", notes = "根据id修改监测船名称、所属的监测区域")
     @PutMapping("/edit")
     @Transactional(rollbackFor = Exception.class)
-    public Result<String> editArea(@RequestBody Area area) {
+    public Result<String> editArea(@RequestBody Station station) {
         Integer userId = BaseContext.getCurrentId();
         User user = userService.getById(userId);
 
@@ -90,21 +89,21 @@ public class AreaController {
             return Result.error("用户权限不足");
         }
 
-        Area byId = areaService.getById(area.getId());
+        Station byId = stationService.getById(station.getId());
         if (byId == null) {
             throw new CustomException("无此id数据");
         }
 
-        //修改area表中的数据
-        areaService.updateById(area);
+        //修改station表中的数据
+        stationService.updateById(station);
 
         //修改水质数据表中的数据，可改成UpdateWrapper
         LambdaQueryWrapper<WaterQuality> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(WaterQuality::getArea, byId.getName());
+        wrapper.eq(station.getName() != null, WaterQuality::getArea, byId.getName());
         List<WaterQuality> list = waterQualityService.list(wrapper);
-        log.info("list:" + list);
         list.stream().map(item -> {
-            item.setArea(area.getName());
+            item.setArea(station.getArea());
+            item.setStation(station.getName());
             waterQualityService.updateById(item);
             return item;
         }).collect(Collectors.toList());

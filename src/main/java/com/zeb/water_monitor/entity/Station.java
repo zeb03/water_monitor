@@ -4,49 +4,38 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import java.io.Serializable;
-import java.time.LocalDateTime;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
+
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author zeb
- * @since 2023-05-09
+ * @since 2023-05-21
  */
 @Getter
 @Setter
-@TableName("model")
-@ApiModel(value = "Model对象", description = "")
-public class Model implements Serializable {
+@TableName("station")
+@ApiModel(value = "Station对象", description = "")
+public class Station implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @ApiModelProperty("主键id")
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
+    @ApiModelProperty("监测船名称")
     @TableField("name")
     private String name;
 
-    @TableField("target")
-    private String target;
-
-    @TableField("method")
-    private String method;
-
-    @TableField("rmse")
-    private Float rmse;
-
-    @TableField("uid")
-    private Integer uid;
-
-    @TableField("date")
-    private LocalDateTime date;
-
-
+    @ApiModelProperty("监测区域")
+    @TableField("area")
+    private String area;
 }

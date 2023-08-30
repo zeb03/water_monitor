@@ -1,6 +1,6 @@
 package com.zeb.water_monitor.mapper;
 
-import com.zeb.water_monitor.entity.Model;
+import com.zeb.water_monitor.entity.Station;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -10,9 +10,9 @@ import org.apache.ibatis.annotations.Mapper;
  * </p>
  *
  * @author zeb
- * @since 2023-05-09
+ * @since 2023-05-21
  */
 @Mapper
-public interface ModelMapper extends BaseMapper<Model> {
+public interface StationMapper extends BaseMapper<Station> {
 
 }
