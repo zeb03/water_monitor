@@ -4,7 +4,7 @@
 # 应用服务 WEB 访问端口
 spring:
   profiles:
-    active: prod
+    active: dev
   swagger2:
     enabled: true
 

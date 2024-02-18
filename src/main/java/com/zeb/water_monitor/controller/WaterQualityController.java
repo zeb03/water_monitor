@@ -225,7 +225,6 @@ public class WaterQualityController {
         return Result.success(indicators);
     }
 
-
     @ApiOperation(value = "获取本月不达标数据", notes = "返回本月不达标的区域及其次数")
     @GetMapping("/substandard")
     public Result<SubstandardAreas> getSubstandardAreas() {

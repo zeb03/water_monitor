@@ -2,6 +2,7 @@ package com.zeb.water_monitor.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.zeb.water_monitor.entity.WaterQuality;
+import com.zeb.water_monitor.enums.IndicatorEnum;
 import com.zeb.water_monitor.vo.PlotVO;
 import com.zeb.water_monitor.vo.Prediction;
 
@@ -23,7 +24,5 @@ public interface WaterQualityService extends IService<WaterQuality> {
      */
     PlotVO getDataForPlot(String area,Integer period,String indicator);
 
-
-    Prediction getDateForPrediction(String indicator);
-
+    Prediction getDateForPrediction(IndicatorEnum indicator);
 }

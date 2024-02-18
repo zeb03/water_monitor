@@ -31,10 +31,10 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-
-    @ApiOperation(value = "登录", notes = "登录功能，管理员账户及密码：admin,111111")
+    @ApiOperation(value = "登录", notes = "登录功能，管理员账户及密码：")
     @PostMapping("/login")
     public Result<User> login(@RequestBody UserLoginDTO userLoginDTO, HttpServletRequest request) {
+        log.info("Login");
         LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(User::getUsername, userLoginDTO.getUsername())
                 .last("limit 1");

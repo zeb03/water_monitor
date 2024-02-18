@@ -64,4 +64,11 @@ public class WaterQuality implements Serializable {
     @ApiModelProperty("监测区域")
     private String area;
 
+    @TableField("lon")
+    @ApiModelProperty("经度")
+    private String lng;
+
+    @TableField("lat")
+    @ApiModelProperty("维度")
+    private String lat;
 }

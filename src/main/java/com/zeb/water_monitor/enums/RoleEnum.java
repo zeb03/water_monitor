@@ -11,22 +11,11 @@ import lombok.Getter;
 @Getter
 public enum RoleEnum {
 
-    /**
-     *
-     */
     ADMIN(1, "admin"),
     USER(2, "user");
 
-    /**
-     * 权限id
-     */
-
     @EnumValue
     private Integer roleId;
-
-    /**
-     * 权限名称
-     */
     @JsonValue
     private String roleName;
 

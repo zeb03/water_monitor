@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.zeb.water_monitor.common.CustomException;
 import com.zeb.water_monitor.entity.WaterQuality;
+import com.zeb.water_monitor.enums.IndicatorEnum;
 import com.zeb.water_monitor.mapper.WaterQualityMapper;
 import com.zeb.water_monitor.service.WaterQualityService;
 import com.zeb.water_monitor.vo.PlotVO;
@@ -14,10 +15,10 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
+
+import static com.zeb.water_monitor.utils.DataCalculateUtil.calAverage;
 
 /**
  * <p>
@@ -79,7 +80,7 @@ public class WaterQualityServiceImpl extends ServiceImpl<WaterQualityMapper, Wat
     }
 
     @Override
-    public Prediction getDateForPrediction(String indicator) {
+    public Prediction getDateForPrediction(IndicatorEnum indicator) {
 
         QueryWrapper<WaterQuality> wrapper = new QueryWrapper<>();
 
@@ -101,7 +102,7 @@ public class WaterQualityServiceImpl extends ServiceImpl<WaterQualityMapper, Wat
             List<WaterQuality> waterQualityList = this.getWaterQualitiesBySpecificDate(dateStr);
 
             //求平均值
-            float average = calAverage(indicator, waterQualityList);
+            double average = calAverage(indicator, waterQualityList);
             BigDecimal bigDecimal = BigDecimal.valueOf(average);
             forPlot.add(bigDecimal.setScale(2, BigDecimal.ROUND_HALF_UP).floatValue());
         }
@@ -142,32 +143,5 @@ public class WaterQualityServiceImpl extends ServiceImpl<WaterQualityMapper, Wat
 
         log.info("当天水质数据量: " + list.size());
         return list;
-    }
-
-    /**
-     * 计算平均数
-     *
-     * @param indicator
-     * @param waterQualities
-     * @return
-     */
-    private float calAverage(String indicator, List<WaterQuality> waterQualities) {
-        float sum = 0;
-        for (WaterQuality waterQuality : waterQualities) {
-            if ("ph".equalsIgnoreCase(indicator)) {
-                sum += waterQuality.getPh();
-            } else if ("temperature".equalsIgnoreCase(indicator)) {
-                sum += waterQuality.getTemperature();
-            } else if ("conductivity".equalsIgnoreCase(indicator)) {
-                sum += waterQuality.getConductivity();
-            } else if ("turbidity".equalsIgnoreCase(indicator)) {
-                sum += waterQuality.getTurbidity();
-            } else if ("tds".equalsIgnoreCase(indicator)) {
-                sum += waterQuality.getTds();
-            } else {
-                throw new CustomException("参数错误，请联系管理员");
-            }
-        }
-        return sum / waterQualities.size();
     }
 }

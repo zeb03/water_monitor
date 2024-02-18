@@ -27,6 +27,9 @@ public abstract class MyWebConfig implements WebMvcConfigurer {
         registry.addInterceptor(loginInterceptor)
                 .addPathPatterns("/**")
                 .excludePathPatterns(
+                        "/**",
+                        "/excel/export/water-data",
+                        "/excel/export/all/water-data",
                         "/user/login",
                         "/user/register",
                         "/water/quality/query",
@@ -44,15 +47,6 @@ public abstract class MyWebConfig implements WebMvcConfigurer {
                         "/favicon.ico",
                         "/v2/api-docs");
     }
-
-//    @Override
-//    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-//        //添加映射
-//        registry.addResourceHandler("doc.html").addResourceLocations("classpath:/META-INF/resources/");
-//        registry.addResourceHandler("/").addResourceLocations("classpath:/META-INF/resources/");
-//        registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
-//        registry.addResourceHandler("/**").addResourceLocations("classpath:/static/");
-//    }
 
     @Override
     public void extendMessageConverters(List<HttpMessageConverter<?>> converters) {

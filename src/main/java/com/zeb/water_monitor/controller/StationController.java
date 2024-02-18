@@ -1,30 +1,37 @@
 package com.zeb.water_monitor.controller;
 
 
+import cn.hutool.core.bean.BeanUtil;
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.zeb.water_monitor.common.BaseContext;
 import com.zeb.water_monitor.common.CustomException;
 import com.zeb.water_monitor.common.Result;
+import com.zeb.water_monitor.dto.ShipDTO;
 import com.zeb.water_monitor.entity.Station;
 import com.zeb.water_monitor.entity.User;
 import com.zeb.water_monitor.entity.WaterQuality;
 import com.zeb.water_monitor.enums.RoleEnum;
+import com.zeb.water_monitor.server.SseServer;
 import com.zeb.water_monitor.service.StationService;
 import com.zeb.water_monitor.service.UserService;
 import com.zeb.water_monitor.service.WaterQualityService;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
- *
  * @author zeb
  * @since 2023-05-21
  */
+@Slf4j
 @RestController
 @RequestMapping("/station")
 public class StationController {
@@ -109,5 +116,30 @@ public class StationController {
         }).collect(Collectors.toList());
 
         return Result.success("修改成功");
+    }
+
+    @Autowired
+    private SseServer sseServer;
+
+    @GetMapping("position/all")
+    public Result<List<ShipDTO>> getAllPosition() {
+        List<Station> ships = stationService.list();
+        LambdaQueryWrapper<WaterQuality> waterQualityLambdaQueryWrapper = Wrappers.lambdaQuery(WaterQuality.class).orderByDesc(WaterQuality::getDate);
+
+        List<ShipDTO> result = ships.stream().map(Station::getName).flatMap(item -> {
+            List<WaterQuality> qualityList = waterQualityService.list(waterQualityLambdaQueryWrapper.eq(WaterQuality::getStation, item));
+            if (qualityList.isEmpty()) {
+                return Stream.empty();
+            } else {
+                WaterQuality waterQuality = qualityList.get(0);
+                ShipDTO shipDTO = new ShipDTO();
+                BeanUtil.copyProperties(waterQuality, shipDTO);
+                return Stream.of(shipDTO);
+            }
+        }).collect(Collectors.toList());
+
+        sseServer.conect("1");
+        sseServer.send("1", JSON.toJSONString(result));
+        return Result.success(result);
     }
 }

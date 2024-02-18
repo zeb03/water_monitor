@@ -5,7 +5,6 @@ import com.alibaba.fastjson.JSON;
 import com.zeb.water_monitor.common.BaseContext;
 import com.zeb.water_monitor.common.Result;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -17,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author ze
  */
 @Slf4j
-@Component
+//@Component
 public class LoginInterceptor implements HandlerInterceptor {
 
     @Override
